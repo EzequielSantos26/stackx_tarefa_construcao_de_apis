@@ -1,10 +1,10 @@
 import { promises as fs } from "fs";
 
-import {absoluteFilePeth} from "./absolute-file-path.js"; 
+import {absoluteFilePatch} from "./absolute-file-patch.js"; 
 
 export const loadPessoa = async () => {
   try {
-    const data = await fs.readfile(absoluteFilePeth, 'utf-8');
+    const data = await fs.readFile(absoluteFilePatch, 'utf-8');
      if (data.length === 0) { return [];
 
      }
