@@ -34,4 +34,4 @@ import { createPessoa } from "./src/crud/pessoa-crud.js";
   app.listen(port, () => {
     console.log(`servidor executando na porta ${port}`);
   });
-})();
+})(); 
