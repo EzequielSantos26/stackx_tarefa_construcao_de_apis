@@ -1,6 +1,7 @@
 import express from "express";
 import { loadPessoa } from "./src/utils/load-pessoa.js";
 import { createPessoa } from "./src/crud/pessoa-crud.js";
+import validatePessoa from "./src/middlewares/validate.pessoa.js";
 
 (() => {
   const app = express();
@@ -16,9 +17,11 @@ import { createPessoa } from "./src/crud/pessoa-crud.js";
   loadPessoa()
     .then((data) => {
       if (data.length) {
-        console.log("registro(s) cadastrado(s)", data);
+        //console.log('registro (s)) cadastrado(s)', data);
+        
       } else {
-        console.log("nunhum registro cadastrado!");
+
+        //console.log('nenhum registro cadastrado!');
       }
     })
     .catch((error) => {
@@ -28,7 +31,8 @@ import { createPessoa } from "./src/crud/pessoa-crud.js";
   app.use(express.json());
 
   app.post(
-    endpoints.createPessoa, createPessoa
+    endpoints.createPessoa, validatePessoa, createPessoa 
+    
   );
 
   app.listen(port, () => {

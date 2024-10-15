@@ -30,8 +30,6 @@ const createPessoa = async( request, response) => {
      const data = await loadPessoa(); 
 
      data.push(pessoa);
-
-     console.log(data);
      
     await fs.writeFile( 
       absoluteFilePatch, formatjsfile(data) 
