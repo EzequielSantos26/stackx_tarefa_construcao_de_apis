@@ -1,6 +1,10 @@
 import express from "express";
 import { loadPessoa } from "./src/utils/load-pessoa.js";
-import { createPessoa } from "./src/crud/pessoa-crud.js";
+import {
+  createPessoa,
+  readAllPessoas,
+  readPessoaById,
+} from "./src/crud/pessoa-crud.js";
 import validatePessoa from "./src/middlewares/validate.pessoa.js";
 
 (() => {
@@ -18,9 +22,7 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
     .then((data) => {
       if (data.length) {
         //console.log('registro (s)) cadastrado(s)', data);
-        
       } else {
-
         //console.log('nenhum registro cadastrado!');
       }
     })
@@ -30,12 +32,13 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
 
   app.use(express.json());
 
-  app.post(
-    endpoints.createPessoa, validatePessoa, createPessoa 
-    
-  );
+  app.post(endpoints.createPessoa, validatePessoa, createPessoa);
+
+  app.get(endpoints.readAllPessoas, readAllPessoas);
+
+  app.get(endpoints.readPessoaById, readPessoaById);
 
   app.listen(port, () => {
     console.log(`servidor executando na porta ${port}`);
   });
-})(); 
+})();
