@@ -43,7 +43,21 @@ const readAllPessoas = async (request, response) => {
 
 const readPessoaById = async (request, response) => {
   const id = Number(request.params.id);
-  console.log(id);
-};
+  const data = await loadPessoa();
+
+  const filteredData = data.filter((item) => item.pessoa_id !== id);
+
+  if (filteredData.length < data.length) {
+    const pessoa = data.find((item) => item.pessoa_id === id);
+
+    return response
+      .status(200)
+      .send({ message: `Dados do registro de id '${id}':`, pessoa });
+  }
+  return response
+    .status(404)
+    .send({ message: `Registro de id '${id}' não econtrado!` });
+}; 
+
 
 export { createPessoa, readAllPessoas, readPessoaById };
