@@ -4,6 +4,7 @@ import {
   createPessoa,
   readAllPessoas,
   readPessoaById,
+  updatapessoaById,
 } from "./src/crud/pessoa-crud.js";
 import validatePessoa from "./src/middlewares/validate.pessoa.js";
 
@@ -37,6 +38,8 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
   app.get(endpoints.readAllPessoas, readAllPessoas);
 
   app.get(endpoints.readPessoaById, readPessoaById);
+
+  app.put(endpoints.updatePessoaById,validatePessoa,updatapessoaById);
 
   app.listen(port, () => {
     console.log(`servidor executando na porta ${port}`);

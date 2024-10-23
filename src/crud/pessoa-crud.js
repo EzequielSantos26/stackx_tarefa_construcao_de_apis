@@ -3,6 +3,8 @@ import { checkExistenceOrCreateFile } from "../utils/check-existence-or-create-f
 import { loadPessoa } from "../utils/load-pessoa.js";
 import { absoluteFilePatch } from "../utils/absolute-file-patch.js";
 import { formatjsfile } from "../utils/format-json-file.js";
+import { log } from "console";
+import { response } from "express";
 
 (() => {
   checkExistenceOrCreateFile();
@@ -57,7 +59,35 @@ const readPessoaById = async (request, response) => {
   return response
     .status(404)
     .send({ message: `Registro de id '${id}' não econtrado!` });
-}; 
+};
 
+const updatapessoaById = async (request, response) => {
+  const id = Number(request.params.id);
 
-export { createPessoa, readAllPessoas, readPessoaById };
+  const { name, gender, ethnicity, nationality, personality } = request.body;
+  const updatepessoa = {
+    name: String(name).toLowerCase().trim(),
+    gender: String(gender).toLowerCase().trim(),
+    ethnicity: String(ethnicity).toLowerCase().trim(),
+    nationality: String(nationality).toLowerCase().trim(),
+    personality: String(personality).toLowerCase().trim(),
+  };
+  const data = await loadPessoa();
+
+  const index = data.findIndex((item) => item.pessoa_id === id);
+  if (index !== -1) {
+    data[index] = {
+      ...data[index],
+      ...updatepessoa,
+    };
+    await fs.writeFile(absoluteFilePatch, formatjsfile(data));
+    return response
+      .status(200)
+      .send({ message: `registro de id '${id}' atualizado` });
+  }
+  return response
+    .status(404)
+    .send({ message: `Registro de id '${id}' não encontrado` });
+};
+
+export { createPessoa, readAllPessoas, readPessoaById, updatapessoaById };
