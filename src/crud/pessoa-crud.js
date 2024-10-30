@@ -2,13 +2,13 @@ import { promises as fs } from "fs";
 import { checkExistenceOrCreateFile } from "../utils/check-existence-or-create-file.js";
 import { loadPessoa } from "../utils/load-pessoa.js";
 import { absoluteFilePatch } from "../utils/absolute-file-patch.js";
-import { formatjsfile } from "../utils/format-json-file.js";
-import { log } from "console";
-import { response } from "express";
+import { formatjsonFile } from "../utils/format-json-file.js";
+
 
 (() => {
   checkExistenceOrCreateFile();
 })();
+
 const createPessoa = async (request, response) => {
   const { name, gender, ethnicity, nationality, personality } = request.body;
   const pessoa = {
@@ -23,7 +23,7 @@ const createPessoa = async (request, response) => {
 
   data.push(pessoa);
 
-  await fs.writeFile(absoluteFilePatch, formatjsfile(data));
+  await fs.writeFile(absoluteFilePatch, formatjsonFile(data));
 
   return response
     .status(201)
@@ -80,7 +80,7 @@ const updatapessoaById = async (request, response) => {
       ...data[index],
       ...updatepessoa,
     };
-    await fs.writeFile(absoluteFilePatch, formatjsfile(data));
+    await fs.writeFile(absoluteFilePatch,formatjsonFile(data));
     return response
       .status(200)
       .send({ message: `registro de id '${id}' atualizado` });
@@ -90,4 +90,26 @@ const updatapessoaById = async (request, response) => {
     .send({ message: `Registro de id '${id}' não encontrado` });
 };
 
-export { createPessoa, readAllPessoas, readPessoaById, updatapessoaById };
+const deletepessoaById = async (request, response) => {
+  const id = Number(request.params.id);
+  const data = await loadPessoa();
+
+  const filteredData = data.filter((item) => item.pessoa_id !== id);
+  if (filteredData.length < data.length) {
+    await fs.writeFile(absoluteFilePatch, formatjsonFile(filteredData));
+    return response
+    .status(200)
+    .send({ message: `O registro de id '${id} excluido!'` });
+  }
+  return response
+  .status(404)
+  .send({ message: `O registro de id '${id} Não encontrado!'` });
+};
+
+export {
+  createPessoa,
+  readAllPessoas,
+  readPessoaById,
+  updatapessoaById,
+  deletepessoaById,
+};

@@ -2,6 +2,7 @@ import express from "express";
 import { loadPessoa } from "./src/utils/load-pessoa.js";
 import {
   createPessoa,
+  deletepessoaById,
   readAllPessoas,
   readPessoaById,
   updatapessoaById,
@@ -17,6 +18,7 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
     readAllPessoas: String("/api/pessoas"),
     readPessoaById: String("/api/pessoas/:id"),
     updatePessoaById: String("/api/pessoas/:id"),
+    deletePessoaById: String('/api/pessoas/:id'),
   };
 
   loadPessoa()
@@ -40,6 +42,11 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
   app.get(endpoints.readPessoaById, readPessoaById);
 
   app.put(endpoints.updatePessoaById,validatePessoa,updatapessoaById);
+
+  app.delete ( 
+    endpoints.deletePessoaById,deletepessoaById,
+  );
+
 
   app.listen(port, () => {
     console.log(`servidor executando na porta ${port}`);
