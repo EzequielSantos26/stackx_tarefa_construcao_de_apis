@@ -1,37 +1,36 @@
 import { promises as fs } from "fs";
 import { checkExistenceOrCreateFile } from "../utils/check-existence-or-create-file.js";
-import { loadPessoa } from "../utils/load-pessoa.js";
-import { absoluteFilePatch } from "../utils/absolute-file-patch.js";
-import { formatjsonFile } from "../utils/format-json-file.js";
-
+import { loadPerson } from "../utils/load-person.js";
+import { absoluteFilePath } from "../utils/absolute-file-path.js";
+import { formatJsonFile } from "../utils/format-json-file.js";
 
 (() => {
   checkExistenceOrCreateFile();
 })();
 
-const createPessoa = async (request, response) => {
+const createPerson = async (request, response) => {
   const { name, gender, ethnicity, nationality, personality } = request.body;
-  const pessoa = {
-    pessoa_id: Date.now(),
+  const person = {
+    person_id: Date.now(),
     name: String(name).toLowerCase().trim(),
     gender: String(gender).toLowerCase().trim(),
     ethnicity: String(ethnicity).toLowerCase().trim(),
     nationality: String(nationality).toLowerCase().trim(),
     personality: String(personality).toLowerCase().trim(),
   };
-  const data = await loadPessoa();
+  const data = await loadPerson();
 
-  data.push(pessoa);
+  data.push(person);
 
-  await fs.writeFile(absoluteFilePatch, formatjsonFile(data));
+  await fs.writeFile(absoluteFilePath, formatJsonFile(data));
 
   return response
     .status(201)
-    .send({ message: "Resgistro criado com sucesso!", pessoa });
+    .send({ message: "Resgistro criado com sucesso!", person });
 };
 
-const readAllPessoas = async (request, response) => {
-  const data = await loadPessoa();
+const readAllPeople = async (request, response) => {
+  const data = await loadPerson();
   if (data.lengt === 0) {
     return response
       .status(404)
@@ -43,44 +42,44 @@ const readAllPessoas = async (request, response) => {
     .send({ message: "Registro(s) Cadastrado(s):", data });
 };
 
-const readPessoaById = async (request, response) => {
+const readPersonById = async (request, response) => {
   const id = Number(request.params.id);
-  const data = await loadPessoa();
+  const data = await loadPerson();
 
-  const filteredData = data.filter((item) => item.pessoa_id !== id);
+  const filteredData = data.filter((item) => item.person_id !== id);
 
   if (filteredData.length < data.length) {
-    const pessoa = data.find((item) => item.pessoa_id === id);
+    const person = data.find((item) => item.person_id === id);
 
     return response
       .status(200)
-      .send({ message: `Dados do registro de id '${id}':`, pessoa });
+      .send({ message: `Dados do registro de id '${id}':`, person });
   }
   return response
     .status(404)
     .send({ message: `Registro de id '${id}' não econtrado!` });
 };
 
-const updatapessoaById = async (request, response) => {
+const updatePersonById = async (request, response) => {
   const id = Number(request.params.id);
 
   const { name, gender, ethnicity, nationality, personality } = request.body;
-  const updatepessoa = {
+  const updatedPerson = {
     name: String(name).toLowerCase().trim(),
     gender: String(gender).toLowerCase().trim(),
     ethnicity: String(ethnicity).toLowerCase().trim(),
     nationality: String(nationality).toLowerCase().trim(),
     personality: String(personality).toLowerCase().trim(),
   };
-  const data = await loadPessoa();
+  const data = await loadPerson();
 
-  const index = data.findIndex((item) => item.pessoa_id === id);
+  const index = data.findIndex((item) => item.person_id === id);
   if (index !== -1) {
     data[index] = {
       ...data[index],
-      ...updatepessoa,
+      ...updatedPerson,
     };
-    await fs.writeFile(absoluteFilePatch,formatjsonFile(data));
+    await fs.writeFile(absoluteFilePath, formatJsonFile(data));
     return response
       .status(200)
       .send({ message: `registro de id '${id}' atualizado` });
@@ -90,26 +89,26 @@ const updatapessoaById = async (request, response) => {
     .send({ message: `Registro de id '${id}' não encontrado` });
 };
 
-const deletepessoaById = async (request, response) => {
+const deletePersonById = async (request, response) => {
   const id = Number(request.params.id);
-  const data = await loadPessoa();
+  const data = await loadPerson();
 
-  const filteredData = data.filter((item) => item.pessoa_id !== id);
+  const filteredData = data.filter((item) => item.person_id !== id);
   if (filteredData.length < data.length) {
-    await fs.writeFile(absoluteFilePatch, formatjsonFile(filteredData));
+    await fs.writeFile(absoluteFilePath, formatJsonFile(filteredData));
     return response
-    .status(200)
-    .send({ message: `O registro de id '${id} excluido!'` });
+      .status(200)
+      .send({ message: `O registro de id '${id} excluido!'` });
   }
   return response
-  .status(404)
-  .send({ message: `O registro de id '${id} Não encontrado!'` });
+    .status(404)
+    .send({ message: `O registro de id '${id} Não encontrado!'` });
 };
 
 export {
-  createPessoa,
-  readAllPessoas,
-  readPessoaById,
-  updatapessoaById,
-  deletepessoaById,
+  createPerson,
+  readAllPeople,
+  readPersonById,
+  updatePersonById,
+  deletePersonById,
 };

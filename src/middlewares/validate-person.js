@@ -1,8 +1,8 @@
 import { messages } from 'joi-translation-pt-br'
-import PessoaSchema from "../schema/PessoaSchema.js"; 
+import PersonSchema from "../schema/PersonSchema.js"; 
 
-const validatePessoa = (request, response, nexFunction) => {
-  const { error } = PessoaSchema.validate(request.body, {messages}); 
+const validatePerson = (request, response, nexFunction) => {
+  const { error } = PersonSchema.validate(request.body, {messages}); 
 
     if (error) { 
         return response.status(400).send ( 
@@ -18,4 +18,4 @@ const validatePessoa = (request, response, nexFunction) => {
 
 
 
-export default validatePessoa; 
+export default validatePerson; 

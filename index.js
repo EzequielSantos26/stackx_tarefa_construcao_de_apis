@@ -1,27 +1,27 @@
 import express from "express";
-import { loadPessoa } from "./src/utils/load-pessoa.js";
+import { loadPerson } from "./src/utils/load-person.js";
 import {
-  createPessoa,
-  deletepessoaById,
-  readAllPessoas,
-  readPessoaById,
-  updatapessoaById,
-} from "./src/crud/pessoa-crud.js";
-import validatePessoa from "./src/middlewares/validate.pessoa.js";
+  createPerson,
+  deletePersonById,
+  readAllPeople,
+  readPersonById,
+  updatePersonById,
+} from "./src/crud/person-crud.js";
+import validatePerson from "./src/middlewares/validate-person.js";
 
 (() => {
   const app = express();
   const port = 3000;
 
   const endpoints = {
-    createPessoa: String("/api/pessoas"),
-    readAllPessoas: String("/api/pessoas"),
-    readPessoaById: String("/api/pessoas/:id"),
-    updatePessoaById: String("/api/pessoas/:id"),
-    deletePessoaById: String('/api/pessoas/:id'),
+    createPerson: String("/api/pessoas"),
+    readAllPeople: String("/api/pessoas"),
+    readPersonById: String("/api/pessoas/:id"),
+    updatePersonById: String("/api/pessoas/:id"),
+    deletePersonById: String('/api/pessoas/:id'),
   };
 
-  loadPessoa()
+  loadPerson()
     .then((data) => {
       if (data.length) {
         //console.log('registro (s)) cadastrado(s)', data);
@@ -35,17 +35,16 @@ import validatePessoa from "./src/middlewares/validate.pessoa.js";
 
   app.use(express.json());
 
-  app.post(endpoints.createPessoa, validatePessoa, createPessoa);
+  app.post(endpoints.createPerson, validatePerson, createPerson);
 
-  app.get(endpoints.readAllPessoas, readAllPessoas);
+  app.get(endpoints.readAllPeople, readAllPeople);
 
-  app.get(endpoints.readPessoaById, readPessoaById);
+  app.get(endpoints.readPersonById, readPersonById);
 
-  app.put(endpoints.updatePessoaById,validatePessoa,updatapessoaById);
+  app.put(endpoints.updatePersonById,validatePerson,updatePersonById);
 
   app.delete ( 
-    endpoints.deletePessoaById,deletepessoaById,
-  );
+    endpoints.deletePersonById,deletePersonById);
 
 
   app.listen(port, () => {
