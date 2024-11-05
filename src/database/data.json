@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "person_id": 1730842241598,
+    "name": "marcos",
+    "gender": "masculino",
+    "ethnicity": "pardos",
+    "nationality": "brasileiro",
+    "personality": "guerreiro"
+  }
+]
