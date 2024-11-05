@@ -14,11 +14,11 @@ import validatePerson from "./src/middlewares/validate-person.js";
   const port = 3000;
 
   const endpoints = {
-    createPerson: String("/api/pessoas"),
-    readAllPeople: String("/api/pessoas"),
-    readPersonById: String("/api/pessoas/:id"),
-    updatePersonById: String("/api/pessoas/:id"),
-    deletePersonById: String('/api/pessoas/:id'),
+    createPerson: String("/api/people/create-person"),
+    readAllPeople: String("/api/people/read-all-people"),
+    readPersonById: String("/api/people/read-person/:id"),
+    updatePersonById: String("/api/people/update-person/:id"),
+    deletePersonById: String('/api/people/delete-person/:id'),
   };
 
   loadPerson()
@@ -50,4 +50,4 @@ import validatePerson from "./src/middlewares/validate-person.js";
   app.listen(port, () => {
     console.log(`servidor executando na porta ${port}`);
   });
-})();
+})(); 
